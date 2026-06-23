@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ConverterScreen() {
+fun UtilityScreen() {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     val tabs = listOf("Weight", "Distance", "Currency")
 

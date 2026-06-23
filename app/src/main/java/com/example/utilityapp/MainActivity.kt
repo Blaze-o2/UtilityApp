@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Calculate
+import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -21,8 +21,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.utilityapp.screens.ConverterScreen
 import com.example.utilityapp.screens.SettingsScreen
+import com.example.utilityapp.screens.UtilityScreen
 import com.example.utilityapp.ui.theme.UtilityAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -47,16 +47,16 @@ fun UtilityAppPreview() {
 
 @Composable
 fun UtilityApp() {
-    var selectedTab by remember { mutableStateOf("Converter") }
+    var selectedTab by remember { mutableStateOf("Utility") }
 
     Scaffold(
         bottomBar = {
             NavigationBar {
                 NavigationBarItem(
-                    icon = { Icon(Icons.Default.Calculate, contentDescription = "Converter") },
-                    label = { Text("Converter") },
-                    selected = selectedTab == "Converter",
-                    onClick = { selectedTab = "Converter" }
+                    icon = { Icon(Icons.Default.Build, contentDescription = "Utility") },
+                    label = { Text("Utility") },
+                    selected = selectedTab == "Utility",
+                    onClick = { selectedTab = "Utility" }
                 )
                 NavigationBarItem(
                     icon = { Icon(Icons.Default.Settings, contentDescription = "Settings") },
@@ -69,7 +69,7 @@ fun UtilityApp() {
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             when (selectedTab) {
-                "Converter" -> ConverterScreen()
+                "Utility" -> UtilityScreen()
                 "Settings" -> SettingsScreen()
             }
         }

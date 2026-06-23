@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
@@ -38,13 +39,7 @@ fun WeightConverterScreen() {
     var toUnit by remember { mutableStateOf(WeightUnit.POUNDS) }
     var fromExpanded by remember { mutableStateOf(value = false) }
     var toExpanded by remember { mutableStateOf(value = false) }
-
-    val inputAmount = inputValue.toDoubleOrNull() ?: 0.0
-    val result = if (inputValue.isNotEmpty()) {
-        (inputAmount * fromUnit.factorToKg) / toUnit.factorToKg
-    } else {
-        0.0
-    }
+    var resultText by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -59,7 +54,7 @@ fun WeightConverterScreen() {
             onValueChange = { inputValue = it },
             label = { Text("Enter value") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         )
 
         // From Unit Selection
@@ -120,10 +115,23 @@ fun WeightConverterScreen() {
             }
         }
 
-        Text(
-            text = "Result: ${"%.4f".format(result)} ${toUnit.label.split(" ").last()}",
-            style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.padding(top = 16.dp)
-        )
+        Button(
+            onClick = {
+                val inputAmount = inputValue.toDoubleOrNull() ?: 0.0
+                val result = (inputAmount * fromUnit.factorToKg) / toUnit.factorToKg
+                resultText = "%.4f ${toUnit.label.split(" ").last()}".format(result)
+            },
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            Text("Convert")
+        }
+
+        if (resultText.isNotEmpty()) {
+            Text(
+                text = "Result: $resultText",
+                style = MaterialTheme.typography.headlineSmall,
+                modifier = Modifier.padding(top = 16.dp)
+            )
+        }
     }
 }

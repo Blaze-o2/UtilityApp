@@ -18,7 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -34,12 +34,12 @@ enum class WeightUnit(val label: String, val factorToKg: Double) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeightConverterScreen() {
-    var inputValue by remember { mutableStateOf("") }
-    var fromUnit by remember { mutableStateOf(WeightUnit.KILOGRAMS) }
-    var toUnit by remember { mutableStateOf(WeightUnit.POUNDS) }
-    var fromExpanded by remember { mutableStateOf(value = false) }
-    var toExpanded by remember { mutableStateOf(value = false) }
-    var resultText by remember { mutableStateOf("") }
+    var inputValue by rememberSaveable { mutableStateOf("") }
+    var fromUnit by rememberSaveable { mutableStateOf(WeightUnit.KILOGRAMS) }
+    var toUnit by rememberSaveable { mutableStateOf(WeightUnit.POUNDS) }
+    var fromExpanded by rememberSaveable { mutableStateOf(value = false) }
+    var toExpanded by rememberSaveable { mutableStateOf(value = false) }
+    var resultText by rememberSaveable { mutableStateOf("") }
 
     Column(
         modifier = Modifier

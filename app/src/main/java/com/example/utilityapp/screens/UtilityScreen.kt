@@ -25,7 +25,7 @@ fun UtilityScreen() {
                 Tab(
                     selected = selectedTabIndex == index,
                     onClick = { selectedTabIndex = index },
-                    text = { Text(title) }
+                    text = { Text(title) },
                 )
             }
         }

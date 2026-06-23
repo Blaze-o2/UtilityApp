@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
@@ -23,26 +24,32 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.utilityapp.viewmodel.CurrencyViewModel
 
-enum class CurrencyUnit(val label: String, val code: String, val rateToUsd: Double) {
-    USD("US Dollar", "USD", 1.0),
-    EUR("Euro", "EUR", 1.08),
-    GBP("British Pound", "GBP", 1.27),
-    JPY("Japanese Yen", "JPY", 0.0067),
-    AUD("Australian Dollar", "AUD", 0.66),
-    CAD("Canadian Dollar", "CAD", 0.74),
-    INR("Indian Rupee", "INR", 0.012)
+enum class CurrencyUnit(val label: String, val code: String) {
+    USD("US Dollar", "USD"),
+    EUR("Euro", "EUR"),
+    GBP("British Pound", "GBP"),
+    JPY("Japanese Yen", "JPY"),
+    AUD("Australian Dollar", "AUD"),
+    CAD("Canadian Dollar", "CAD"),
+    INR("Indian Rupee", "INR")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CurrencyConverterScreen() {
+fun CurrencyConverterScreen(viewModel: CurrencyViewModel = viewModel()) {
     var inputValue by remember { mutableStateOf("") }
     var fromUnit by remember { mutableStateOf(CurrencyUnit.USD) }
     var toUnit by remember { mutableStateOf(CurrencyUnit.EUR) }
     var fromExpanded by remember { mutableStateOf(value = false) }
     var toExpanded by remember { mutableStateOf(value = false) }
     var resultText by remember { mutableStateOf("") }
+
+    val rates = viewModel.rates
+    val isLoading = viewModel.isLoading
+    val error = viewModel.error
 
     Column(
         modifier = Modifier
@@ -51,10 +58,26 @@ fun CurrencyConverterScreen() {
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Text("Currency Converter", style = MaterialTheme.typography.headlineMedium)
+        
+        if (isLoading) {
+            CircularProgressIndicator(modifier = Modifier.padding(16.dp))
+        }
+
+        if (error != null) {
+            Text(
+                text = error,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+            )
+            Button(onClick = { viewModel.fetchRates() }) {
+                Text("Retry")
+            }
+        }
+
         Text(
-            "Note: Using fixed exchange rates for demonstration.",
+            "Note: Using real-time exchange rates from API.",
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.secondary
+            color = MaterialTheme.colorScheme.secondary,
         )
 
         OutlinedTextField(
@@ -71,7 +94,7 @@ fun CurrencyConverterScreen() {
         // From Unit Selection
         ExposedDropdownMenuBox(
             expanded = fromExpanded,
-            onExpandedChange = { fromExpanded = !fromExpanded }
+            onExpandedChange = { fromExpanded = !fromExpanded },
         ) {
             OutlinedTextField(
                 value = "${fromUnit.label} (${fromUnit.code})",
@@ -131,10 +154,15 @@ fun CurrencyConverterScreen() {
         Button(
             onClick = {
                 val inputAmount = inputValue.toDoubleOrNull() ?: 0.0
-                // Convert fromUnit to USD, then USD to toUnit
-                val result = (inputAmount * fromUnit.rateToUsd) / toUnit.rateToUsd
+                val fromRate = rates[fromUnit.code] ?: 1.0
+                val toRate = rates[toUnit.code] ?: 1.0
+                
+                // response is base on USD (or whatever base we used)
+                // result = input * (toRate / fromRate)
+                val result = inputAmount * (toRate / fromRate)
                 resultText = "%.2f ${toUnit.code}".format(result)
             },
+            enabled = rates.isNotEmpty() && !isLoading,
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text("Convert")

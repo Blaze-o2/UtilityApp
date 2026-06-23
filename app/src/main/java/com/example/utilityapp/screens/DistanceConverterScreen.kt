@@ -24,19 +24,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 
-enum class WeightUnit(val label: String, val factorToKg: Double) {
-    KILOGRAMS("Kilograms (kg)", 1.0),
-    GRAMS("Grams (g)", 0.001),
-    POUNDS("Pounds (lb)", 0.453592),
-    OUNCES("Ounces (oz)", 0.0283495)
+enum class DistanceUnit(val label: String, val factorToMeters: Double) {
+    METERS("Meters (m)", 1.0),
+    KILOMETERS("Kilometers (km)", 1000.0),
+    MILES("Miles (mi)", 1609.34),
+    FEET("Feet (ft)", 0.3048),
+    INCHES("Inches (in)", 0.0254)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WeightConverterScreen() {
+fun DistanceConverterScreen() {
     var inputValue by remember { mutableStateOf("") }
-    var fromUnit by remember { mutableStateOf(WeightUnit.KILOGRAMS) }
-    var toUnit by remember { mutableStateOf(WeightUnit.POUNDS) }
+    var fromUnit by remember { mutableStateOf(DistanceUnit.METERS) }
+    var toUnit by remember { mutableStateOf(DistanceUnit.KILOMETERS) }
     var fromExpanded by remember { mutableStateOf(value = false) }
     var toExpanded by remember { mutableStateOf(value = false) }
     var resultText by remember { mutableStateOf("") }
@@ -47,13 +48,13 @@ fun WeightConverterScreen() {
             .padding(24.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        Text("Weight Converter", style = MaterialTheme.typography.headlineMedium)
+        Text("Distance Converter", style = MaterialTheme.typography.headlineMedium)
 
         OutlinedTextField(
             value = inputValue,
             onValueChange = { 
                 inputValue = it 
-                resultText = ""
+                resultText = "" // Clear result when input changes
             },
             label = { Text("Enter value") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
@@ -77,7 +78,7 @@ fun WeightConverterScreen() {
                 expanded = fromExpanded,
                 onDismissRequest = { fromExpanded = false }
             ) {
-                WeightUnit.entries.forEach { unit ->
+                DistanceUnit.entries.forEach { unit ->
                     DropdownMenuItem(
                         text = { Text(unit.label) },
                         onClick = {
@@ -107,7 +108,7 @@ fun WeightConverterScreen() {
                 expanded = toExpanded,
                 onDismissRequest = { toExpanded = false }
             ) {
-                WeightUnit.entries.forEach { unit ->
+                DistanceUnit.entries.forEach { unit ->
                     DropdownMenuItem(
                         text = { Text(unit.label) },
                         onClick = {
@@ -123,7 +124,7 @@ fun WeightConverterScreen() {
         Button(
             onClick = {
                 val inputAmount = inputValue.toDoubleOrNull() ?: 0.0
-                val result = (inputAmount * fromUnit.factorToKg) / toUnit.factorToKg
+                val result = (inputAmount * fromUnit.factorToMeters) / toUnit.factorToMeters
                 resultText = "%.2f ${toUnit.label.split(" ").last()}".format(result)
             },
             modifier = Modifier.fillMaxWidth(),

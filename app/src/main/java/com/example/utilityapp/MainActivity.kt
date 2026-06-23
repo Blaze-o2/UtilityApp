@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Scale
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Straighten
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -21,6 +22,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.utilityapp.screens.DistanceConverterScreen
 import com.example.utilityapp.screens.SettingsScreen
 import com.example.utilityapp.screens.WeightConverterScreen
 import com.example.utilityapp.ui.theme.UtilityAppTheme
@@ -59,6 +61,12 @@ fun UtilityApp() {
                     onClick = { selectedTab = "Weight" }
                 )
                 NavigationBarItem(
+                    icon = { Icon(Icons.Default.Straighten, contentDescription = "Distance") },
+                    label = { Text("Distance") },
+                    selected = selectedTab == "Distance",
+                    onClick = { selectedTab = "Distance" }
+                )
+                NavigationBarItem(
                     icon = { Icon(Icons.Default.Settings, contentDescription = "Settings") },
                     label = { Text("Settings") },
                     selected = selectedTab == "Settings",
@@ -70,6 +78,7 @@ fun UtilityApp() {
         Box(modifier = Modifier.padding(innerPadding)) {
             when (selectedTab) {
                 "Weight" -> WeightConverterScreen()
+                "Distance" -> DistanceConverterScreen()
                 "Settings" -> SettingsScreen()
             }
         }

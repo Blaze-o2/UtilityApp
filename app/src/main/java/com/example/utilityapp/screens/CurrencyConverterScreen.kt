@@ -102,7 +102,7 @@ fun CurrencyConverterScreen(viewModel: CurrencyViewModel = viewModel()) {
                 readOnly = true,
                 label = { Text("From") },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = fromExpanded) },
-                modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable).fillMaxWidth()
+                modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable).fillMaxWidth(),
             )
             ExposedDropdownMenu(
                 expanded = fromExpanded,
@@ -132,7 +132,7 @@ fun CurrencyConverterScreen(viewModel: CurrencyViewModel = viewModel()) {
                 readOnly = true,
                 label = { Text("To") },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = toExpanded) },
-                modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable).fillMaxWidth()
+                modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable).fillMaxWidth(),
             )
             ExposedDropdownMenu(
                 expanded = toExpanded,

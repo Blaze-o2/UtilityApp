@@ -64,7 +64,7 @@ fun DistanceConverterScreen() {
         // From Unit Selection
         ExposedDropdownMenuBox(
             expanded = fromExpanded,
-            onExpandedChange = { fromExpanded = !fromExpanded }
+            onExpandedChange = { fromExpanded = !fromExpanded },
         ) {
             OutlinedTextField(
                 value = fromUnit.label,
